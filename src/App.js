@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer} from 'react';
 import './App.css';
 import InputForm from './components/InputForm'
-import { getWeather, getPosition } from './components/helpers'
+import { getWeather, getPosition, getLocationData } from './components/helpers'
 import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -105,7 +105,17 @@ function App() {
       })
   }, [])
 
-  
+  useEffect(() => {
+    getPosition()
+      .then(({ coords }) => getLocationData(null, coords.latitude, coords.longitude))
+      .then(locationData => {
+        dispatch({
+          type: 'SET_LOCATION',
+          payload: locationData
+        })
+        console.log('set location', locationData)
+      })
+  },[])
 
   return (
     <div className="App">

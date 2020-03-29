@@ -12,14 +12,14 @@ export const getPosition = () => {
 export const getLocationData = async (location, latitude, longitude) => {
   let lat, long, placeName, mapBoxUrl
   if (!location) {
-    mapBoxUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?types=neightborhood&limit=1&access_token=${mapBoxToken}`
+    mapBoxUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?types=neighborhood&limit=1&access_token=${mapBoxToken}`
   } else {
     mapBoxUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
     location
   )}.json?limit=1&access_token=${mapBoxToken}`
   }
   
-
+  
   await axios
     .get(mapBoxUrl)
     .then(response => {
@@ -29,7 +29,11 @@ export const getLocationData = async (location, latitude, longitude) => {
     })
     .catch(error => console.error('FUCK', error))
 
-  return [lat, long, placeName]
+  return {
+    latitude: lat,
+    longitude: long,
+    placeName
+  }
 }
 
 export const getWeather = async (latitude, longitude) => {
