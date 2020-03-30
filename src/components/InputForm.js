@@ -1,21 +1,28 @@
 import React, { useState } from 'react'
 import { getLocationData, getWeather } from './helpers'
 
-function InputForm({ latitude, longitude }) {
+function InputForm({ dispatch }) {
   const [location, setLocation] = useState('')
-  const [weather, setWeather] = useState({})
-
-
 
   const submitHandler = async e => {
     e.preventDefault()
-    const [latitude, longitude, placeName] = await getLocationData(location, null, null)
+    const { latitude, longitude, placeName } = await getLocationData(
+      location,
+      null,
+      null
+    )
+    dispatch({
+      type: 'SET_LOCATION',
+      payload: { placeName, latitude, longitude }
+    })
     const weatherData = await getWeather(latitude, longitude)
-    setWeather(weatherData)
+    dispatch({
+      type: 'SET_WEATHER',
+      payload: weatherData
+    })
     console.log('searched weather', weatherData)
     setLocation('')
   }
-
 
   return (
     <div>

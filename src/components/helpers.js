@@ -1,24 +1,27 @@
 import axios from 'axios'
+const BASE_MAPBOX_URL = 'https://api.mapbox.com/geocoding/v5/mapbox.places'
 const mapBoxToken =
-    'pk.eyJ1Ijoic3RldmVuZGVscm9zYXJpbyIsImEiOiJjanl2Zndpbmwwb3p3M2lta2xyNjlhc3Q0In0.EUeki9FFRcyDIirOGn26vw'
+  'pk.eyJ1Ijoic3RldmVuZGVscm9zYXJpbyIsImEiOiJjanl2Zndpbmwwb3p3M2lta2xyNjlhc3Q0In0.EUeki9FFRcyDIirOGn26vw'
 
+// Returns a object with the browser geolocation coordinates as a promise.
 export const getPosition = () => {
   return new Promise(function(resolve, reject) {
     navigator.geolocation.getCurrentPosition(resolve, reject)
   })
 }
 
-
+// Gets location data by location name or by latitude/longitude coordinates.
 export const getLocationData = async (location, latitude, longitude) => {
   let lat, long, placeName, mapBoxUrl
+
   if (!location) {
-    mapBoxUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?types=neighborhood&limit=1&access_token=${mapBoxToken}`
+    mapBoxUrl = `${BASE_MAPBOX_URL}/${longitude},${latitude}.json?types=neighborhood&limit=1&access_token=${mapBoxToken}`
   } else {
-    mapBoxUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
-    location
-  )}.json?limit=1&access_token=${mapBoxToken}`
+    mapBoxUrl = `${BASE_MAPBOX_URL}/${encodeURIComponent(
+      location
+    )}.json?limit=1&access_token=${mapBoxToken}`
   }
-  
+
   await axios
     .get(mapBoxUrl)
     .then(response => {
@@ -26,7 +29,7 @@ export const getLocationData = async (location, latitude, longitude) => {
       lat = response.data.features[0].center[1]
       placeName = response.data.features[0].place_name
     })
-    .catch(error => console.error('FUCK', error))
+    .catch(error => console.error('ERROR DURING MAPBOX FETCH: ', error))
 
   return {
     latitude: lat,
@@ -35,6 +38,7 @@ export const getLocationData = async (location, latitude, longitude) => {
   }
 }
 
+// Fetches weather by latitude/longitude coordinates.
 export const getWeather = async (latitude, longitude) => {
   let weatherData
   const proxy = 'https://cors-anywhere.herokuapp.com/'
@@ -44,8 +48,7 @@ export const getWeather = async (latitude, longitude) => {
     .get(`${proxy}${darkSkiesUrl}${latitude},${longitude}?exclude=flags`)
     .then(request => {
       weatherData = request.data
-      
     })
-    .catch(error => console.log('Error making darksky call: ', error))
+    .catch(error => console.log('ERROR DURING DARKSKY FETCH: ', error))
   return weatherData
 }

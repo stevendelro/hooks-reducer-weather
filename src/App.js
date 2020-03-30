@@ -1,10 +1,9 @@
-import React, { useEffect, useReducer} from 'react';
-import './App.css';
+import React, { useEffect, useReducer } from 'react'
+import './App.css'
 import InputForm from './components/InputForm'
 import { getWeather, getPosition, getLocationData } from './components/helpers'
 import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
-
 
 function App() {
   const initialState = {
@@ -25,11 +24,11 @@ function App() {
     historyList: []
   }
 
-  const weatherReducer = (state, action) => {
+  const reducer = (state, action) => {
     const now = moment()
     const getDate = now.format('L')
     const getTime = now.format('LTS')
-  
+
     switch (action.type) {
       case 'SET_WEATHER':
         return {
@@ -91,7 +90,7 @@ function App() {
     }
   }
 
-  const [state, dispatch] = useReducer(weatherReducer, initialState)
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   // Auto fetch weather from the browser's Geolocation API
   useEffect(() => {
@@ -102,25 +101,25 @@ function App() {
           type: 'SET_WEATHER',
           payload: initialWeather
         })
-        console.log('initial weather', initialWeather)
       })
   }, [])
 
   // Auto fetch the name of the browser's Geolocation coordinates.
   useEffect(() => {
     getPosition()
-      .then(({ coords }) => getLocationData(null, coords.latitude, coords.longitude))
+      .then(({ coords }) =>
+        getLocationData(null, coords.latitude, coords.longitude)
+      )
       .then(locationData => {
         dispatch({
           type: 'SET_LOCATION',
           payload: locationData
         })
-        console.log('set location', locationData)
       })
-  },[])
+  }, [])
 
   // Add the location of the current weather fetch to search history.
-  useEffect(()=> {
+  useEffect(() => {
     if (state.location.placeName) {
       dispatch({
         type: 'LOG_LAST_CITY',
@@ -129,13 +128,13 @@ function App() {
         }
       })
     }
-  },[state.location.placeName])
+  }, [state.location.placeName])
 
   return (
-    <div className="App">
-      <InputForm />
+    <div className='App'>
+      <InputForm dispatch={dispatch} />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
