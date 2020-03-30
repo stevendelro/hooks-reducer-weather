@@ -93,6 +93,7 @@ function App() {
 
   const [state, dispatch] = useReducer(weatherReducer, initialState)
 
+  // Auto fetch weather from the browser's Geolocation API
   useEffect(() => {
     getPosition()
       .then(({ coords }) => getWeather(coords.latitude, coords.longitude))
@@ -105,6 +106,7 @@ function App() {
       })
   }, [])
 
+  // Auto fetch the name of the browser's Geolocation coordinates.
   useEffect(() => {
     getPosition()
       .then(({ coords }) => getLocationData(null, coords.latitude, coords.longitude))
@@ -116,6 +118,18 @@ function App() {
         console.log('set location', locationData)
       })
   },[])
+
+  // Add the location of the current weather fetch to search history.
+  useEffect(()=> {
+    if (state.location.placeName) {
+      dispatch({
+        type: 'LOG_LAST_CITY',
+        payload: {
+          location: state.location.placeName
+        }
+      })
+    }
+  },[state.location.placeName])
 
   return (
     <div className="App">

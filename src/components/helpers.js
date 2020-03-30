@@ -19,7 +19,6 @@ export const getLocationData = async (location, latitude, longitude) => {
   )}.json?limit=1&access_token=${mapBoxToken}`
   }
   
-  
   await axios
     .get(mapBoxUrl)
     .then(response => {
