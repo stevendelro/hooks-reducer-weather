@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { getLocationData, getWeather } from './helpers'
+import * as d3 from 'd3-ease'
+import { getLocationData, getWeather } from '../helpers'
 
-function InputForm({ dispatch }) {
+function InputForm({ dispatch, setViewport, viewport, FlyToInterpolator }) {
   const [location, setLocation] = useState('')
 
   const submitHandler = async e => {
@@ -15,12 +16,20 @@ function InputForm({ dispatch }) {
       type: 'SET_LOCATION',
       payload: { placeName, latitude, longitude }
     })
+    setViewport({
+      ...viewport,
+      latitude: latitude,
+      longitude: longitude,
+      zoom: 10,
+      transitionDuration: 2500,
+      transitionInterpolator: new FlyToInterpolator(),
+      transitionEasing: d3.easeCubic
+    })
     const weatherData = await getWeather(latitude, longitude)
     dispatch({
       type: 'SET_WEATHER',
       payload: weatherData
     })
-    console.log('searched weather', weatherData)
     setLocation('')
   }
 
@@ -42,9 +51,3 @@ function InputForm({ dispatch }) {
 }
 
 export default InputForm
-
-// 1. Loaction data will be taken from the browser
-// 2. That data will be used to get dark sky weather.
-// 3. User can search for a location via the input, which will manually grab data.
-
-//TODO: Implement reducers and global state. Render shit.

@@ -1,6 +1,6 @@
 import axios from 'axios'
 const BASE_MAPBOX_URL = 'https://api.mapbox.com/geocoding/v5/mapbox.places'
-const mapBoxToken =
+export const mapBoxToken =
   'pk.eyJ1Ijoic3RldmVuZGVscm9zYXJpbyIsImEiOiJjanl2Zndpbmwwb3p3M2lta2xyNjlhc3Q0In0.EUeki9FFRcyDIirOGn26vw'
 
 // Returns a object with the browser geolocation coordinates as a promise.

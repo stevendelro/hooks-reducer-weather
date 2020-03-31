@@ -1,14 +1,18 @@
 import React, { useEffect, useReducer } from 'react'
 import './App.css'
-import InputForm from './components/InputForm'
-import { getWeather, getPosition, getLocationData } from './components/helpers'
 import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
+import InputForm from './components/InputForm'
+import Map from './components/Map'
+
+import { getWeather, getPosition, getLocationData } from './helpers'
 
 function App() {
   const initialState = {
     error: false,
     noWeatherData: true,
+    noHistoryData: true,
+    noLocationData: true,
     weather: {
       currently: {},
       hourly: {},
@@ -20,7 +24,7 @@ function App() {
       longitude: '',
       timeSearched: ''
     },
-    noHistoryData: true,
+    
     historyList: []
   }
 
@@ -43,7 +47,7 @@ function App() {
       case 'SET_LOCATION':
         return {
           ...state,
-          nodata: false,
+          noLocationData: false,
           location: {
             placeName: action.payload.placeName,
             latitude: action.payload.latitude,
@@ -130,9 +134,11 @@ function App() {
     }
   }, [state.location.placeName])
 
+  
+
   return (
     <div className='App'>
-      <InputForm dispatch={dispatch} />
+      {state.noLocationData ? <h1>Loading..</h1> : <Map state={state} dispatch={dispatch} /> }
     </div>
   )
 }
