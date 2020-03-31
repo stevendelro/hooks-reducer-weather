@@ -1,9 +1,8 @@
 import React, { useEffect, useReducer } from 'react'
-import './App.css'
 import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
-import InputForm from './components/InputForm'
 import Map from './components/Map'
+import FloatingLabel from './components/FloatingLabel'
 
 import { getWeather, getPosition, getLocationData } from './helpers'
 
@@ -138,6 +137,7 @@ function App() {
 
   return (
     <div className='App'>
+      {state.noWeatherData ? null : <FloatingLabel state={state} />}
       {state.noLocationData ? <h1>Loading..</h1> : <Map state={state} dispatch={dispatch} /> }
     </div>
   )

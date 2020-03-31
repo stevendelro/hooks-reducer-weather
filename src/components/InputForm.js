@@ -20,7 +20,7 @@ function InputForm({ dispatch, setViewport, viewport, FlyToInterpolator }) {
       ...viewport,
       latitude: latitude,
       longitude: longitude,
-      zoom: 10,
+      zoom: 7,
       transitionDuration: 2500,
       transitionInterpolator: new FlyToInterpolator(),
       transitionEasing: d3.easeCubic
