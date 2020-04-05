@@ -14,7 +14,7 @@ const StyledTemps = styled.div`
   font-size: -webkit-xxx-large;
   position: absolute;
   top: 42%;
-  left: 79%;
+  left: 78%;
 `
 
 function Map({ state, dispatch }) {
@@ -23,26 +23,30 @@ function Map({ state, dispatch }) {
     height: 400,
     latitude: state.location.latitude,
     longitude: state.location.longitude,
-    zoom: 10
+    zoom: 10,
   })
 
   return (
     <>
       <ReactMapGL
         {...viewport}
-        mapStyle='mapbox://styles/mapbox/light-v8'
+        mapStyle='mapbox://styles/mapbox/outdoors-v11'
         onViewportChange={setViewport}
         mapboxApiAccessToken={mapBoxToken}>
-        <Marker latitude={state.location.latitude} longitude={state.location.longitude}>
-          <span role='img' aria-label='pinned location'>📍</span>
+        <Marker
+          latitude={state.location.latitude}
+          longitude={state.location.longitude}>
+          <span role='img' aria-label='pinned location'>
+            📍
+          </span>
         </Marker>
-        {!state.noWeatherData ? (
+        {state.weatherData ? (
           <StyledTemps>
-            <div>
+            <div style={{ color: '#ffb0cd' }}>
               {`${state.weather.daily.data[0].temperatureHigh.toFixed(0)}°F`}
             </div>
             <hr />
-            <div>
+            <div style={{ color: '#c2f0fc' }}>
               {`${state.weather.daily.data[0].temperatureLow.toFixed(0)}°F`}
             </div>
           </StyledTemps>

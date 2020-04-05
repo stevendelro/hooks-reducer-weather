@@ -3,6 +3,7 @@ import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
 import Map from './components/Map'
 import FloatingLabel from './components/FloatingLabel'
+import DailyChart from './components/DailyChart'
 
 import { getWeather, getPosition, getLocationData } from './helpers'
 
@@ -13,6 +14,7 @@ function App() {
     noHistoryData: true,
     noLocationData: true,
     weather: {
+      loading: false,
       currently: {},
       hourly: {},
       daily: {}
@@ -27,6 +29,7 @@ function App() {
     historyList: []
   }
 
+
   const reducer = (state, action) => {
     const now = moment()
     const getDate = now.format('L')
@@ -38,6 +41,8 @@ function App() {
           ...state,
           noWeatherData: false,
           weather: {
+            ...state.weather,
+            loading: false,
             currently: { ...action.payload.currently },
             hourly: { ...action.payload.hourly },
             daily: { ...action.payload.daily }
@@ -47,6 +52,10 @@ function App() {
         return {
           ...state,
           noLocationData: false,
+          weather:{
+            ...state.weather,
+            loading: true
+          },
           location: {
             placeName: action.payload.placeName,
             latitude: action.payload.latitude,
@@ -137,8 +146,9 @@ function App() {
 
   return (
     <div className='App'>
-      {state.noWeatherData ? null : <FloatingLabel state={state} />}
-      {state.noLocationData ? <h1>Loading..</h1> : <Map state={state} dispatch={dispatch} /> }
+      {state.noLocationData ? null : <FloatingLabel state={state} />}
+      {state.noWeatherData ? <h1>Loading Map..</h1> : <Map state={state} dispatch={dispatch} /> }
+      {state.weather.loading || state.noHistoryData ? <h1>Loading Chart..</h1> : <DailyChart state={state} dispatch={dispatch} /> }
     </div>
   )
 }

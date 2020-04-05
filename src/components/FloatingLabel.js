@@ -10,10 +10,10 @@ const StyledFloatingLabel = styled.div`
   background-color: rgba(40, 40, 40, .6);
   color: #ffffff;
   z-index: 1 !important;
-  padding: 6px;
+  padding: 20px;
   font-weight: bold;
   font-size: xx-large;
-  max-width: 74%;
+  max-width: 530px;
 `
 
 function FloatingLabel({state}) {
