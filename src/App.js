@@ -2,8 +2,6 @@ import React, { useEffect, useReducer } from 'react'
 import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
 import Map from './components/Map'
-import FloatingLabel from './components/FloatingLabel'
-import DailyChart from './components/DailyChart'
 
 import { getWeather, getPosition, getLocationData } from './helpers'
 
@@ -146,9 +144,7 @@ function App() {
 
   return (
     <div className='App'>
-      {state.noLocationData ? null : <FloatingLabel state={state} />}
       {state.noWeatherData ? <h1>Loading Map..</h1> : <Map state={state} dispatch={dispatch} /> }
-      {state.weather.loading || state.noHistoryData ? <h1>Loading Chart..</h1> : <DailyChart state={state} dispatch={dispatch} /> }
     </div>
   )
 }

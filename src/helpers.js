@@ -15,7 +15,7 @@ export const getLocationData = async (location, latitude, longitude) => {
   let lat, long, placeName, mapBoxUrl
 
   if (!location) {
-    mapBoxUrl = `${BASE_MAPBOX_URL}/${longitude},${latitude}.json?types=neighborhood&limit=1&access_token=${mapBoxToken}`
+    mapBoxUrl = `${BASE_MAPBOX_URL}/${longitude},${latitude}.json?&access_token=${mapBoxToken}`
   } else {
     mapBoxUrl = `${BASE_MAPBOX_URL}/${encodeURIComponent(
       location
@@ -25,6 +25,7 @@ export const getLocationData = async (location, latitude, longitude) => {
   await axios
     .get(mapBoxUrl)
     .then(response => {
+      console.log('mapbox', mapBoxUrl)
       long = response.data.features[0].center[0]
       lat = response.data.features[0].center[1]
       placeName = response.data.features[0].place_name
