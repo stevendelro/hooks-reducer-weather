@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from 'react'
 import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
 import Map from './components/Map'
+import ChartContainer from './components/ChartContainer'
 
 import { getWeather, getPosition, getLocationData } from './helpers'
 
@@ -15,18 +16,17 @@ function App() {
       loading: false,
       currently: {},
       hourly: {},
-      daily: {}
+      daily: {},
     },
     location: {
       placeName: '',
       latitude: '',
       longitude: '',
-      timeSearched: ''
+      timeSearched: '',
     },
-    
-    historyList: []
-  }
 
+    historyList: [],
+  }
 
   const reducer = (state, action) => {
     const now = moment()
@@ -35,30 +35,45 @@ function App() {
 
     switch (action.type) {
       case 'SET_WEATHER':
+        // DAILY: Format Timestamp to human legible weekday and day of month
+        action.payload.daily.data.forEach(day => {
+          day.weekday = moment.unix(day.time).format('ddd')
+          day.date = moment.unix(day.time).format('M/D')
+        })
+        // HOURLY: Format Timestamp to relative time
+        action.payload.hourly.data.forEach(hour => {
+          hour.relativeTime = moment.unix(hour.time).fromNow()
+        })
+
         return {
           ...state,
           noWeatherData: false,
           weather: {
             ...state.weather,
             loading: false,
-            currently: { ...action.payload.currently },
+            currently: {
+              ...action.payload.currently,
+              today: moment
+                .unix(action.payload.currently.time)
+                .format('dddd, MMMM Do')
+            },
             hourly: { ...action.payload.hourly },
-            daily: { ...action.payload.daily }
-          }
+            daily: { ...action.payload.daily },
+          },
         }
       case 'SET_LOCATION':
         return {
           ...state,
           noLocationData: false,
-          weather:{
+          weather: {
             ...state.weather,
-            loading: true
+            loading: true,
           },
           location: {
             placeName: action.payload.placeName,
             latitude: action.payload.latitude,
-            longitude: action.payload.longitude
-          }
+            longitude: action.payload.longitude,
+          },
         }
       case 'LOG_LAST_CITY': {
         // Splicing the history list to keep the most recent 7 searches.
@@ -75,9 +90,9 @@ function App() {
                 key: uuidv4(),
                 location: action.payload.location,
                 date: getDate,
-                timeSearched: getTime
-              }
-            ]
+                timeSearched: getTime,
+              },
+            ],
           }
         } else {
           return {
@@ -89,9 +104,9 @@ function App() {
                 key: uuidv4(),
                 location: action.payload.location,
                 timeSearched: getTime,
-                date: getDate
-              }
-            ]
+                date: getDate,
+              },
+            ],
           }
         }
       }
@@ -109,7 +124,7 @@ function App() {
       .then(initialWeather => {
         dispatch({
           type: 'SET_WEATHER',
-          payload: initialWeather
+          payload: initialWeather,
         })
       })
   }, [])
@@ -123,7 +138,7 @@ function App() {
       .then(locationData => {
         dispatch({
           type: 'SET_LOCATION',
-          payload: locationData
+          payload: locationData,
         })
       })
   }, [])
@@ -134,17 +149,24 @@ function App() {
       dispatch({
         type: 'LOG_LAST_CITY',
         payload: {
-          location: state.location.placeName
-        }
+          location: state.location.placeName,
+        },
       })
     }
   }, [state.location.placeName])
 
-  
-
   return (
     <div className='App'>
-      {state.noWeatherData ? <h1>Loading Map..</h1> : <Map state={state} dispatch={dispatch} /> }
+      {state.noWeatherData ? (
+        <h1>Loading Map..</h1>
+      ) : (
+        <Map state={state} />
+      )}
+      {state.noWeatherData || state.weather.loading ? (
+        <h1>Loading Chart..</h1>
+      ) : (
+        <ChartContainer state={state} />
+      )}
     </div>
   )
 }

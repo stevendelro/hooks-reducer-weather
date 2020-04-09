@@ -44,11 +44,11 @@ function Map({ state, dispatch }) {
         </Marker>
         {state.noWeatherData ? null : (
           <StyledTemps>
-            <div style={{ color: '#ffb0cd' }}>
+            <div>
               {`${state.weather.daily.data[0].temperatureHigh.toFixed(0)}°F`}
             </div>
             <hr />
-            <div style={{ color: '#c2f0fc' }}>
+            <div>
               {`${state.weather.daily.data[0].temperatureLow.toFixed(0)}°F`}
             </div>
           </StyledTemps>
