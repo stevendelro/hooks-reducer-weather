@@ -4,6 +4,7 @@ import ReactMapGL, { Marker, FlyToInterpolator } from 'react-map-gl'
 import { mapBoxToken } from '../helpers'
 import InputForm from './InputForm'
 import FloatingLabel from './FloatingLabel'
+import Header from './ui/Header'
 
 const StyledTemps = styled.div`
   margin: 12px;
@@ -29,7 +30,14 @@ function Map({ state, dispatch }) {
 
   return (
     <>
-      {state.noLocationData ? null : <FloatingLabel state={state} />} 
+      <Header
+        setViewport={setViewport}
+        viewport={viewport}
+        FlyToInterpolator={FlyToInterpolator}
+        dispatch={dispatch}
+      />
+      <div>
+      {state.noLocationData ? null : <FloatingLabel state={state} />}
       <ReactMapGL
         {...viewport}
         mapStyle='mapbox://styles/mapbox/outdoors-v11'
@@ -54,12 +62,8 @@ function Map({ state, dispatch }) {
           </StyledTemps>
         )}
       </ReactMapGL>
-      <InputForm
-        setViewport={setViewport}
-        viewport={viewport}
-        FlyToInterpolator={FlyToInterpolator}
-        dispatch={dispatch}
-      />
+      </div>
+      
     </>
   )
 }

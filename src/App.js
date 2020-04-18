@@ -38,7 +38,7 @@ function App() {
         // DAILY: Format Timestamp to human legible weekday and day of month
         action.payload.daily.data.forEach(day => {
           day.weekday = moment.unix(day.time).format('ddd')
-          day.date = moment.unix(day.time).format('M/D')
+          day.date = moment.unix(day.time).format('dddd M/D')
         })
         // HOURLY: Format Timestamp to relative time
         action.payload.hourly.data.forEach(hour => {
@@ -160,7 +160,7 @@ function App() {
       {state.noWeatherData ? (
         <h1>Loading Map..</h1>
       ) : (
-        <Map state={state} />
+        <Map state={state} dispatch={dispatch} />
       )}
       {state.noWeatherData || state.weather.loading ? (
         <h1>Loading Chart..</h1>

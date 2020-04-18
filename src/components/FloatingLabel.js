@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 const StyledFloatingLabel = styled.div`
   display: inline-block;
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   margin: 12px;
