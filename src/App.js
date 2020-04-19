@@ -1,6 +1,5 @@
 import React, { useEffect, useReducer } from 'react'
 import moment from 'moment'
-import * as d3 from 'd3-ease'
 import { v4 as uuidv4 } from 'uuid'
 import Map from './components/Map'
 import Header from './components/ui/Header'

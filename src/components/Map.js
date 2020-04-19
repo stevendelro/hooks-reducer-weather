@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import * as d3 from 'd3-ease'
 import ReactMapGL, { Marker } from 'react-map-gl'
 import { mapBoxToken } from '../helpers'
 import FloatingLabel from './FloatingLabel'
