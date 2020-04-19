@@ -25,7 +25,6 @@ export const getLocationData = async (location, latitude, longitude) => {
   await axios
     .get(mapBoxUrl)
     .then(response => {
-      console.log('mapbox', mapBoxUrl)
       long = response.data.features[0].center[0]
       lat = response.data.features[0].center[1]
       placeName = response.data.features[0].place_name

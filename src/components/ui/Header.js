@@ -15,7 +15,6 @@ import MailIcon from '@material-ui/icons/Mail'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import MoreIcon from '@material-ui/icons/MoreVert'
 
-import * as d3 from 'd3-ease'
 import { getLocationData, getWeather } from '../../helpers'
 
 const useStyles = makeStyles(theme => ({
@@ -82,12 +81,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function PrimarySearchAppBar({
-  dispatch,
-  setViewport,
-  viewport,
-  FlyToInterpolator,
-}) {
+export default function PrimarySearchAppBar({ dispatch }) {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null)
@@ -104,14 +98,9 @@ export default function PrimarySearchAppBar({
       type: 'SET_LOCATION',
       payload: { placeName, latitude, longitude },
     })
-    setViewport({
-      ...viewport,
-      latitude: latitude,
-      longitude: longitude,
-      zoom: 7,
-      transitionDuration: 2500,
-      transitionInterpolator: new FlyToInterpolator(),
-      transitionEasing: d3.easeCubic,
+    dispatch({
+      type: 'SET_VIEWPORT',
+      payload: { latitude, longitude },
     })
     const weatherData = await getWeather(latitude, longitude)
     dispatch({
@@ -140,7 +129,6 @@ export default function PrimarySearchAppBar({
   const handleMobileMenuOpen = event => {
     setMobileMoreAnchorEl(event.currentTarget)
   }
-
 
   const menuId = 'primary-search-account-menu'
   const renderMenu = (

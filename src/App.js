@@ -1,7 +1,9 @@
 import React, { useEffect, useReducer } from 'react'
 import moment from 'moment'
+import * as d3 from 'd3-ease'
 import { v4 as uuidv4 } from 'uuid'
 import Map from './components/Map'
+import Header from './components/ui/Header'
 import ChartContainer from './components/ChartContainer'
 
 import { getWeather, getPosition, getLocationData } from './helpers'
@@ -24,7 +26,6 @@ function App() {
       longitude: '',
       timeSearched: '',
     },
-
     historyList: [],
   }
 
@@ -157,6 +158,7 @@ function App() {
 
   return (
     <div className='App'>
+      <Header dispatch={dispatch} />
       {state.noWeatherData ? (
         <h1>Loading Map..</h1>
       ) : (

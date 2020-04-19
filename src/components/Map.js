@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import ReactMapGL, { Marker, FlyToInterpolator } from 'react-map-gl'
+import * as d3 from 'd3-ease'
+import ReactMapGL, { Marker } from 'react-map-gl'
 import { mapBoxToken } from '../helpers'
-import InputForm from './InputForm'
 import FloatingLabel from './FloatingLabel'
-import Header from './ui/Header'
 
 const StyledTemps = styled.div`
   margin: 12px;
@@ -19,29 +18,17 @@ const StyledTemps = styled.div`
   left: 78%;
 `
 
-function Map({ state, dispatch }) {
-  const [viewport, setViewport] = useState({
-    width: 800,
-    height: 400,
-    latitude: state.location.latitude,
-    longitude: state.location.longitude,
-    zoom: 10,
-  })
-
+function Map({ state }) {
   return (
     <>
-      <Header
-        setViewport={setViewport}
-        viewport={viewport}
-        FlyToInterpolator={FlyToInterpolator}
-        dispatch={dispatch}
-      />
-      <div>
       {state.noLocationData ? null : <FloatingLabel state={state} />}
       <ReactMapGL
-        {...viewport}
+        latitude={state.location.latitude}
+        longitude={state.location.longitude}
+        zoom={10}
+        width={800}
+        height={400}
         mapStyle='mapbox://styles/mapbox/outdoors-v11'
-        onViewportChange={setViewport}
         mapboxApiAccessToken={mapBoxToken}>
         <Marker
           latitude={state.location.latitude}
@@ -62,8 +49,6 @@ function Map({ state, dispatch }) {
           </StyledTemps>
         )}
       </ReactMapGL>
-      </div>
-      
     </>
   )
 }
